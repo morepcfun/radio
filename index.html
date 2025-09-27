@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Radio</title>
+<meta name="description" content="Secret 💦 place...">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAE2klEQVR4AbyXe0ybVRTAz/2+FtiGMkZ4jAEbOMXoCOrmI4pTzGYCRrIHVKdOEhNDy8YoOBOjmYZk8R9NiDiHMGG0icaM6dTMR2J0Zrj9YSQxC4Uy5WGYKSwKLTBKX/d47oXWMlppC1tzz73nnnvuOb9+3/3O1yow/zG25uyvbclunJ/etEECHG5OT0MEMwLUGI/n5N207JRIAkw63C5A9DJgKlfgdE17RqrheFIyrd/wJgFaX5twILBmkY0xuFfxxF2NU5PGa1uzR6pb1hcBLYq1GyESQAZm2C/H4A5Zlha0XbUtOaMHm7MeNzZuWtvSslUb7LJcXQLUfLihkC7/sbDBGKSpinJOTcSJ9C2r3grrF8OCBGCM7Qq1t+yB2/GpbZthxz2bsJTG0vtvm0p0xq/okzIHgCw/FACBsbGmZ2Hi2ItsrPF5uPL2/sGuHUUToXxjtUkAZMBEgPzMFMxPTxMqMGkB4K44QCFucevVwtyKvDPkML9K2jKbBBAxRMLNmcnAP9otppCcmIAzA+sR+MJcjLEyk8589hScUqXjMjulpgniKcbD+RvWoXskhXmGUmDjp1XwUMZd8M/pYspOjRyua6XOCueP5ifNa66zRz1Vnrhv+ws7C3Oz8xI2zg6984gMwK6mgO2D3Qx8GjkP2TG2HZOgu21P27Iqp7LWo5gStHD38PvbCrz2hECuazZXQA+rMMjXaLS/ntxreimszxILSnHxT96dW8/3VX1xZAARvvH7uye5X11qTFZU1maqMH8dy9UIHEKRReX8TTFKQQDn3x6pRtQxKNVoNJaO8o7mE/tOpEe0h5wWAPxsPfcbAvxCdtmcYx5AThY5i6RjCUxR9Fpf3LCp3Nxqfsa8ZaldCwA6odPHPZ7K4E3XbG5AujfBtqV0BiwBFHgZOVwyVZi6zBXm55pKmsTTtmjrAgCxevhyjRUUNAldiNvuA88MF2r0QiRU0YqQwce33pI0RSBvtJe0pwYHWgQgFu0+fpC+9JTQhUwPu4B7YoQQAUiIRUsgR9VEja19b8c+aaIuJEBD74FpReFFtB5ojoFZQF805yGwdaHCQFVV5ZOT5WZZckMCAH2MPdWXEPA9oI6mlBxgcpggojqUYmdoURT4rK2sLTMsgNhWbzEYGYMLfgjfLMLUny7AFYJQ49Wq/wUQEEaL/lFg8JfQhXjpQIorwVfgdjBQDiwJAPSps+izaRgjkc3nRHD87lz2waQvlhIRgMhKEBlUD0aFLgR9APbLs+Ce9IppzBIxgMiwZpWSgwy7he6X6RE3OAadMZ0LRN4VFUBVd5UnqyflQQZwxA8gRnFLJqxOEG9QpAIibJEIA/Z6VAAiqA50PjqYR5mX30lPqFXYpFCJcI37wE4gU1dcwL1kkAthOsSvBjsHL0YN4A9n7K/ud1hGCxiHxyjVkN9O9R88DgLpd4KdDurs+OI3KiL/3jHt0DVAA/0R8++MYaQAXmOf/rzDYruDMV4IyN+lmhH41czdCDM2D4z3zoDjDyfpbgd4cc9qWF1y6NtD8hdPzFcgmFeCUOWs661+9WLvD6ngw1wALKJa8TQdiV0kJejkBaNdI+sqP688o+vU0TM0F2FFAOZCzfWd9EqvsxqG6yyGC69YDWfre/Vf1lv039X2GXoIlM95/df/CwAA////kIdgAAAABklEQVQDAF6y31A2obGlAAAAAElFTkSuQmCC" type="image/png">
+<style>
+:root {
+--neon-blue: #00e5ff;
+--neon-glow: rgba(0, 229, 255, 0.75);
+--background-black: #000000;
+}
+html, body {
+height: 100%;
+margin: 0;
+background-color: var(--background-black);
+display: flex;
+justify-content: center;
+align-items: center;
+}
+#play-container {
+width: 100%;
+height: 100%;
+cursor: pointer;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+#play-button {
+width: 18vmin;
+height: 18vmin;
+position: relative;
+display: flex;
+justify-content: center;
+align-items: center;
+border-radius: 50%;
+background-color: transparent;
+border: 0.4vmin solid var(--neon-blue);
+box-shadow: 0 0 1.5vmin var(--neon-blue),
+0 0 3.5vmin var(--neon-blue),
+0 0 6vmin var(--neon-glow);
+animation: pulse 2.5s infinite ease-in-out;
+transition: transform 0.2s, box-shadow 0.2s;
+}
+#play-container:hover #play-button {
+transform: scale(1.05);
+box-shadow: 0 0 2vmin var(--neon-blue),
+0 0 5vmin var(--neon-blue),
+0 0 8vmin var(--neon-glow);
+}
+#play-icon, #pause-icon {
+fill: var(--neon-blue);
+filter: drop-shadow(0 0 1vmin var(--neon-blue));
+width: 40%;
+transition: opacity 0.3s;
+position: absolute;
+}
+#pause-icon {
+opacity: 0;
+}
+#play-container.playing #play-icon {
+opacity: 0;
+}
+#play-container.playing #pause-icon {
+opacity: 1;
+}
+@keyframes pulse {
+0%, 100% {
+box-shadow: 0 0 1.5vmin var(--neon-blue), 0 0 3.5vmin var(--neon-blue), 0 0 6vmin var(--neon-glow);
+transform: scale(1);
+}
+50% {
+box-shadow: 0 0 2.5vmin var(--neon-blue), 0 0 6vmin var(--neon-blue), 0 0 12vmin var(--neon-glow);
+transform: scale(1.02);
+}
+}
+</style>
+</head>
+<body>
+<audio id="audio1"></audio>
+<audio id="audio2"></audio>
+<div id="play-container" title="Play music">
+<div id="play-button">
+<svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+<svg id="pause-icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>
+</div>
+</div>
+<script>
+const trackList = [
+"song001.mp3",
+"song002.mp3",
+"song003.mp3",
+"song004.mp3",
+"song005.mp3",
+"song006.mp3",
+"song007.mp3",
+"song008.mp3",
+"song009.mp3",
+"song010.mp3",
+"song011.mp3",
+"song012.mp3",
+"song013.mp3",
+"song014.mp3",
+"song015.mp3",
+"song016.mp3",
+"song017.mp3",
+"song018.mp3",
+"song019.mp3",
+"song020.mp3",
+"song021.mp3",
+"song022.mp3",
+"song023.mp3",
+"song024.mp3",
+"song025.mp3",
+"song026.mp3",
+"song027.mp3",
+"song028.mp3",
+"song029.mp3",
+"song030.mp3",
+"song031.mp3",
+"song032.mp3",
+"song033.mp3",
+"song034.mp3",
+"song035.mp3",
+"song036.mp3",
+"song037.mp3",
+"song038.mp3",
+"song039.mp3",
+"song040.mp3",
+"song041.mp3",
+"song042.mp3",
+"song043.mp3",
+"song044.mp3",
+"song045.mp3",
+"song046.mp3",
+"song047.mp3",
+"song048.mp3",
+"song049.mp3",
+"song050.mp3",
+"song051.mp3",
+"song052.mp3",
+"song053.mp3",
+"song054.mp3",
+"song055.mp3",
+"song056.mp3",
+"song057.mp3",
+"song058.mp3",
+"song059.mp3",
+"song060.mp3",
+"song061.mp3",
+"song062.mp3",
+"song063.mp3",
+"song064.mp3",
+"song065.mp3",
+"song066.mp3",
+"song067.mp3",
+"song068.mp3",
+"song069.mp3",
+"song070.mp3",
+"song071.mp3",
+"song072.mp3",
+"song073.mp3",
+"song074.mp3",
+"song075.mp3",
+"song076.mp3",
+"song077.mp3",
+"song078.mp3",
+"song079.mp3",
+"song080.mp3",
+"song081.mp3",
+"song082.mp3",
+"song083.mp3",
+"song084.mp3",
+"song085.mp3",
+"song086.mp3",
+"song087.mp3",
+"song088.mp3",
+"song089.mp3",
+];
+const FADE_IN_DURATION = 2500;
+const FADE_OUT_DURATION = 2500;
+const CROSSFADE_OVERLAP = 2000;
+const playContainer = document.getElementById('play-container');
+const audioPlayers = [document.getElementById('audio1'), document.getElementById('audio2')];
+let shuffledTracks = [];
+let currentTrackIndex = -1;
+let activePlayerIndex = 0;
+let isPlaying = false;
+let hasStarted = false;
+playContainer.addEventListener('click', togglePlayback);
+function togglePlayback() {
+if (trackList.length === 0) {
+alert("Du må legge til sanger i 'trackList' i koden, vennen min! :*");
+return;
+}
+isPlaying = !isPlaying;
+playContainer.classList.toggle('playing', isPlaying);
+if (isPlaying && !hasStarted) {
+hasStarted = true;
+shuffledTracks = [...trackList].sort(() => Math.random() - 0.5);
+playNextTrack();
+} else {
+const activePlayer = audioPlayers[activePlayerIndex];
+const inactivePlayer = audioPlayers[1 - activePlayerIndex];
+if (isPlaying) {
+activePlayer.play();
+} else {
+activePlayer.pause();
+inactivePlayer.pause();
+}
+}
+}
+function playNextTrack() {
+if (!isPlaying) return;
+currentTrackIndex++;
+if (currentTrackIndex >= shuffledTracks.length) {
+currentTrackIndex = 0;
+shuffledTracks.sort(() => Math.random() - 0.5);
+}
+const currentPlayer = audioPlayers[activePlayerIndex];
+const nextPlayer = audioPlayers[1 - activePlayerIndex];
+nextPlayer.src = shuffledTracks[currentTrackIndex];
+nextPlayer.volume = 0;
+nextPlayer.play();
+fade(nextPlayer, 0, 1, FADE_IN_DURATION);
+setTimeout(() => {
+fade(currentPlayer, currentPlayer.volume, 0, FADE_OUT_DURATION);
+}, FADE_IN_DURATION - CROSSFADE_OVERLAP);
+activePlayerIndex = 1 - activePlayerIndex;
+nextPlayer.onended = playNextTrack;
+}
+function fade(audioElement, startVolume, endVolume, duration) {
+const interval = 50;
+const steps = duration / interval;
+const volumeStep = (endVolume - startVolume) / steps;
+let currentStep = 0;
+const fadeInterval = setInterval(() => {
+currentStep++;
+const newVolume = startVolume + (volumeStep * currentStep);
+if ((volumeStep > 0 && newVolume >= endVolume) || (volumeStep < 0 && newVolume <= endVolume) || currentStep > steps) {
+audioElement.volume = endVolume;
+if (endVolume === 0) {
+audioElement.pause();
+audioElement.currentTime = 0;
+}
+clearInterval(fadeInterval);
+} else {
+audioElement.volume = newVolume;
+}
+}, interval);
+}
+</script>
+</body>
+</html>
