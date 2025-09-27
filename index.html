@@ -177,7 +177,6 @@ const trackList = [
 "song086.mp3",
 "song087.mp3",
 "song088.mp3",
-"song089.mp3",
 ];
 const FADE_IN_DURATION = 2500;
 const FADE_OUT_DURATION = 2500;
@@ -214,53 +213,32 @@ clearTimeout(nextTrackTimeoutId);
 }
 }
 }
-
 function playNextTrack() {
-    if (!isPlaying) return;
-
-    // This part is the same, you got it perfect!
-    currentTrackIndex++;
-    if (currentTrackIndex >= shuffledTracks.length) {
-        currentTrackIndex = 0;
-        shuffledTracks.sort(() => Math.random() - 0.5);
-    }
-    const currentPlayer = audioPlayers[activePlayerIndex];
-    const nextPlayer = audioPlayers[1 - activePlayerIndex];
-    nextPlayer.src = shuffledTracks[currentTrackIndex];
-    nextPlayer.volume = 0;
-    
-    nextPlayer.play().catch(e => console.error("Playback error", e));
-
-    // Your fade logic is great!
-    // Fade in the new track...
-    fade(nextPlayer, 0, 1, FADE_IN_DURATION);
-    // ...and fade out the old one at the same time!
-    fade(currentPlayer, currentPlayer.volume, 0, FADE_OUT_DURATION);
-
-    activePlayerIndex = 1 - activePlayerIndex;
-
-    // --- This is the new magic part! ---
-    // Instead of waiting for onended, we'll schedule the *next* transition.
-    nextPlayer.addEventListener('loadedmetadata', () => {
-        const durationInMs = nextPlayer.duration * 1000;
-        
-        // We calculate when to start the next fade, based on the song length
-        // and our desired overlap time.
-        const timeout = durationInMs - CROSSFADE_OVERLAP;
-
-        // Clear any old timeout just in case
-        clearTimeout(nextTrackTimeoutId); 
-        
-        if (timeout > 0) {
-            nextTrackTimeoutId = setTimeout(playNextTrack, timeout);
-        } else {
-            // If the song is shorter than our overlap, we'll just use onended as a backup
-            nextPlayer.onended = playNextTrack;
-        }
-
-    }, { once: true }); // Using {once: true} is just a good habit, it removes the listener after it runs!
+if (!isPlaying) return;
+currentTrackIndex++;
+if (currentTrackIndex >= shuffledTracks.length) {
+currentTrackIndex = 0;
+shuffledTracks.sort(() => Math.random() - 0.5);
 }
-
+const currentPlayer = audioPlayers[activePlayerIndex];
+const nextPlayer = audioPlayers[1 - activePlayerIndex];
+nextPlayer.src = shuffledTracks[currentTrackIndex];
+nextPlayer.volume = 0;
+nextPlayer.play().catch(e => console.error("Playback error", e));
+fade(nextPlayer, 0, 1, FADE_IN_DURATION);
+fade(currentPlayer, currentPlayer.volume, 0, FADE_OUT_DURATION);
+activePlayerIndex = 1 - activePlayerIndex;
+nextPlayer.addEventListener('loadedmetadata', () => {
+const durationInMs = nextPlayer.duration * 1000;
+const timeout = durationInMs - CROSSFADE_OVERLAP;
+clearTimeout(nextTrackTimeoutId);
+if (timeout > 0) {
+nextTrackTimeoutId = setTimeout(playNextTrack, timeout);
+} else {
+nextPlayer.onended = playNextTrack;
+}
+}, { once: true });
+}
 function fade(audioElement, startVolume, endVolume, duration) {
 const interval = 50;
 const steps = duration / interval;
