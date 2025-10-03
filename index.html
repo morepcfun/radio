@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Radio</title>
+<title>Atmospheric 24/7 Radio</title>
+<meta name="description" content="Atmospheric Music & Soundscapes playing 24/7 for your Relaxation or Creativity.">
+<meta name="author" content="Johnny Heggelund">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 <style>
 :root {
 --neon-blue: #00e5ff;
@@ -85,149 +88,119 @@ transform: scale(1.02);
 <svg id="pause-icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>
 </div>
 </div>
-
 <script>
-  const trackList = [
-    "song001.mp3", "song002.mp3", "song003.mp3", "song004.mp3", "song005.mp3",
-    "song006.mp3", "song007.mp3", "song008.mp3", "song009.mp3", "song010.mp3",
-    "song011.mp3", "song012.mp3", "song013.mp3", "song014.mp3", "song015.mp3",
-    "song016.mp3", "song017.mp3", "song018.mp3", "song019.mp3", "song020.mp3",
-    "song021.mp3", "song022.mp3", "song023.mp3", "song024.mp3", "song025.mp3",
-    "song026.mp3", "song027.mp3", "song028.mp3", "song029.mp3", "song030.mp3",
-    "song031.mp3", "song032.mp3", "song033.mp3", "song034.mp3", "song035.mp3",
-    "song036.mp3", "song037.mp3", "song038.mp3", "song039.mp3", "song040.mp3",
-    "song041.mp3", "song042.mp3", "song043.mp3", "song044.mp3", "song045.mp3",
-    "song046.mp3", "song047.mp3", "song048.mp3", "song049.mp3", "song050.mp3",
-    "song051.mp3", "song052.mp3", "song053.mp3", "song054.mp3", "song055.mp3",
-    "song056.mp3", "song057.mp3", "song058.mp3", "song059.mp3", "song060.mp3",
-    "song061.mp3", "song062.mp3", "song063.mp3", "song064.mp3", "song065.mp3",
-    "song066.mp3", "song067.mp3", "song068.mp3", "song069.mp3", "song070.mp3",
-    "song071.mp3", "song072.mp3", "song073.mp3", "song074.mp3", "song075.mp3",
-    "song076.mp3", "song077.mp3", "song078.mp3", "song079.mp3", "song080.mp3",
-    "song081.mp3", "song082.mp3", "song083.mp3", "song084.mp3", "song085.mp3",
-    "song086.mp3", "song087.mp3", "song088.mp3",
-  ];
-
-  const FADE_IN_DURATION = 2500;
-  const FADE_OUT_DURATION = 2500;
-  const CROSSFADE_OVERLAP = 6000;
-
-  const playContainer = document.getElementById('play-container');
-  const audioPlayers = [document.getElementById('audio1'), document.getElementById('audio2')];
-  let shuffledTracks = [];
-  let currentTrackIndex = -1;
-  let activePlayerIndex = 0;
-  let isPlaying = false;
-  let hasStarted = false;
-  let nextTrackTimeoutId;
-
-  playContainer.addEventListener('click', togglePlayback);
-
-  function togglePlayback() {
-    if (trackList.length === 0) {
-      alert("Du må legge til sanger i 'trackList' i koden, vennen min! :*");
-      return;
-    }
-
-    isPlaying = !isPlaying;
-    playContainer.classList.toggle('playing', isPlaying);
-
-    const activePlayer = audioPlayers[activePlayerIndex];
-
-    if (isPlaying) {
-      if (!hasStarted) {
-        // First time playing
-        hasStarted = true;
-        shuffledTracks = [...trackList].sort(() => Math.random() - 0.5);
-        playNextTrack();
-      } else {
-        // Resuming from a pause
-        activePlayer.play();
-        // Recalculate and set the timeout for the next track
-        const remainingTime = (activePlayer.duration - activePlayer.currentTime) * 1000;
-        const timeout = remainingTime - CROSSFADE_OVERLAP;
-
-        clearTimeout(nextTrackTimeoutId);
-        if (timeout > 0) {
-          nextTrackTimeoutId = setTimeout(playNextTrack, timeout);
-        } else {
-          // If the song is already in the crossfade period, listen for it to end
-          activePlayer.onended = playNextTrack;
-        }
-      }
-    } else {
-      // Pausing
-      audioPlayers.forEach(p => p.pause());
-      clearTimeout(nextTrackTimeoutId);
-    }
-  }
-
-  function playNextTrack() {
-    if (!isPlaying) return;
-
-    currentTrackIndex++;
-    if (currentTrackIndex >= shuffledTracks.length) {
-      currentTrackIndex = 0;
-      shuffledTracks.sort(() => Math.random() - 0.5); // Re-shuffle for next loop
-    }
-
-    const currentPlayer = audioPlayers[activePlayerIndex];
-    const nextPlayer = audioPlayers[1 - activePlayerIndex];
-
-    nextPlayer.src = shuffledTracks[currentTrackIndex];
-    nextPlayer.volume = 0;
-
-    nextPlayer.play().catch(e => {
-      console.error(`Error playing ${nextPlayer.src}, skipping track.`, e);
-      // Immediately try to play the next track to keep the music going
-      playNextTrack();
-    });
-
-    fade(nextPlayer, 0, 1, FADE_IN_DURATION);
-    // Only fade out if the player has actually played something
-    if (currentPlayer.duration > 0 && !currentPlayer.paused) {
-      fade(currentPlayer, currentPlayer.volume, 0, FADE_OUT_DURATION);
-    }
-
-    activePlayerIndex = 1 - activePlayerIndex;
-
-    nextPlayer.addEventListener('loadedmetadata', () => {
-      const durationInMs = nextPlayer.duration * 1000;
-      const timeout = durationInMs - CROSSFADE_OVERLAP;
-
-      clearTimeout(nextTrackTimeoutId);
-      if (timeout > 0) {
-        nextTrackTimeoutId = setTimeout(playNextTrack, timeout);
-      } else {
-        // Fallback for very short tracks
-        nextPlayer.onended = playNextTrack;
-      }
-    }, { once: true });
-  }
-
-  function fade(audioElement, startVolume, endVolume, duration) {
-    const interval = 50;
-    const steps = duration / interval;
-    const volumeStep = (endVolume - startVolume) / steps;
-    let currentStep = 0;
-
-    const fadeInterval = setInterval(() => {
-      currentStep++;
-      const newVolume = startVolume + (volumeStep * currentStep);
-
-      if ((volumeStep > 0 && newVolume >= endVolume) || (volumeStep < 0 && newVolume <= endVolume) || currentStep > steps) {
-        audioElement.volume = endVolume;
-        if (endVolume === 0) {
-          audioElement.pause();
-          audioElement.currentTime = 0; // Reset for next use
-        }
-        clearInterval(fadeInterval);
-      } else {
-        audioElement.volume = newVolume;
-      }
-    }, interval);
-  }
+const trackList = [
+"song001.mp3", "song002.mp3", "song003.mp3", "song004.mp3", "song005.mp3",
+"song006.mp3", "song007.mp3", "song008.mp3", "song009.mp3", "song010.mp3",
+"song011.mp3", "song012.mp3", "song013.mp3", "song014.mp3", "song015.mp3",
+"song016.mp3", "song017.mp3", "song018.mp3", "song019.mp3", "song020.mp3",
+"song021.mp3", "song022.mp3", "song023.mp3", "song024.mp3", "song025.mp3",
+"song026.mp3", "song027.mp3", "song028.mp3", "song029.mp3", "song030.mp3",
+"song031.mp3", "song032.mp3", "song033.mp3", "song034.mp3", "song035.mp3",
+"song036.mp3", "song037.mp3", "song038.mp3", "song039.mp3", "song040.mp3",
+"song041.mp3", "song042.mp3", "song043.mp3", "song044.mp3", "song045.mp3",
+"song046.mp3", "song047.mp3", "song048.mp3", "song049.mp3", "song050.mp3",
+"song051.mp3", "song052.mp3", "song053.mp3", "song054.mp3", "song055.mp3",
+"song056.mp3", "song057.mp3", "song058.mp3", "song059.mp3", "song060.mp3",
+"song061.mp3", "song062.mp3", "song063.mp3", "song064.mp3", "song065.mp3",
+"song066.mp3", "song067.mp3", "song068.mp3", "song069.mp3", "song070.mp3",
+"song071.mp3", "song072.mp3", "song073.mp3", "song074.mp3", "song075.mp3",
+"song076.mp3", "song077.mp3", "song078.mp3", "song079.mp3", "song080.mp3",
+"song081.mp3", "song082.mp3", "song083.mp3", "song084.mp3", "song085.mp3",
+"song086.mp3", "song087.mp3", "song088.mp3",
+];
+const FADE_IN_DURATION = 2500;
+const FADE_OUT_DURATION = 2500;
+const CROSSFADE_OVERLAP = 6000;
+const playContainer = document.getElementById('play-container');
+const audioPlayers = [document.getElementById('audio1'), document.getElementById('audio2')];
+let shuffledTracks = [];
+let currentTrackIndex = -1;
+let activePlayerIndex = 0;
+let isPlaying = false;
+let hasStarted = false;
+let nextTrackTimeoutId;
+playContainer.addEventListener('click', togglePlayback);
+function togglePlayback() {
+if (trackList.length === 0) {
+alert("Du må legge til sanger i 'trackList' i koden, vennen min! :*");
+return;
+}
+isPlaying = !isPlaying;
+playContainer.classList.toggle('playing', isPlaying);
+const activePlayer = audioPlayers[activePlayerIndex];
+if (isPlaying) {
+if (!hasStarted) {
+hasStarted = true;
+shuffledTracks = [...trackList].sort(() => Math.random() - 0.5);
+playNextTrack();
+} else {
+activePlayer.play();
+const remainingTime = (activePlayer.duration - activePlayer.currentTime) * 1000;
+const timeout = remainingTime - CROSSFADE_OVERLAP;
+clearTimeout(nextTrackTimeoutId);
+if (timeout > 0) {
+nextTrackTimeoutId = setTimeout(playNextTrack, timeout);
+} else {
+activePlayer.onended = playNextTrack;
+}
+}
+} else {
+audioPlayers.forEach(p => p.pause());
+clearTimeout(nextTrackTimeoutId);
+}
+}
+function playNextTrack() {
+if (!isPlaying) return;
+currentTrackIndex++;
+if (currentTrackIndex >= shuffledTracks.length) {
+currentTrackIndex = 0;
+shuffledTracks.sort(() => Math.random() - 0.5);
+}
+const currentPlayer = audioPlayers[activePlayerIndex];
+const nextPlayer = audioPlayers[1 - activePlayerIndex];
+nextPlayer.src = shuffledTracks[currentTrackIndex];
+nextPlayer.volume = 0;
+nextPlayer.play().catch(e => {
+console.error(`Error playing ${nextPlayer.src}, skipping track.`, e);
+playNextTrack();
+});
+fade(nextPlayer, 0, 1, FADE_IN_DURATION);
+if (currentPlayer.duration > 0 && !currentPlayer.paused) {
+fade(currentPlayer, currentPlayer.volume, 0, FADE_OUT_DURATION);
+}
+activePlayerIndex = 1 - activePlayerIndex;
+nextPlayer.addEventListener('loadedmetadata', () => {
+const durationInMs = nextPlayer.duration * 1000;
+const timeout = durationInMs - CROSSFADE_OVERLAP;
+clearTimeout(nextTrackTimeoutId);
+if (timeout > 0) {
+nextTrackTimeoutId = setTimeout(playNextTrack, timeout);
+} else {
+nextPlayer.onended = playNextTrack;
+}
+}, { once: true });
+}
+function fade(audioElement, startVolume, endVolume, duration) {
+const interval = 50;
+const steps = duration / interval;
+const volumeStep = (endVolume - startVolume) / steps;
+let currentStep = 0;
+const fadeInterval = setInterval(() => {
+currentStep++;
+const newVolume = startVolume + (volumeStep * currentStep);
+if ((volumeStep > 0 && newVolume >= endVolume) || (volumeStep < 0 && newVolume <= endVolume) || currentStep > steps) {
+audioElement.volume = endVolume;
+if (endVolume === 0) {
+audioElement.pause();
+audioElement.currentTime = 0;
+}
+clearInterval(fadeInterval);
+} else {
+audioElement.volume = newVolume;
+}
+}, interval);
+}
 </script>
-
 </body>
 </html>
